@@ -1,0 +1,31 @@
+{
+  "name": "league-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxjoehnk/league-discord-bot.git"
+  },
+  "keywords": [
+    "leagueoflegends",
+    "discord",
+    "bot"
+  ],
+  "author": "Max Jöhnk <maxjoehnk@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/maxjoehnk/league-discord-bot/issues"
+  },
+  "homepage": "https://github.com/maxjoehnk/league-discord-bot#readme",
+  "dependencies": {
+    "debug": "^3.0.1",
+    "discord.js": "^11.1.0",
+    "js-yaml": "^3.9.1",
+    "league-api": "github:maxjoehnk/league-api",
+    "yargs": "^8.0.2"
+  }
+}
