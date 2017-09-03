@@ -5,13 +5,12 @@ const { db } = require('../db');
 const exec = config => async(args, msg) => {
     const query = args.join(' ');
     const champion = await riot.champions.find(db, config.keys.riot, query);
-    const items = await riot.items.all(db, config.keys.riot);
     const stats = await championgg.champion(config.keys['champion.gg'], champion.id);
     const message = buildMessage(champion, stats.hashes.skillorderhash.highestCount, stats.hashes.skillorderhash.highestWinrate);
-    msg.channel.send({ embed: message });
+    msg.channel.send({ embed: message });
 };
 
-const formatSkillOrder = skillOrder => 
+const formatSkillOrder = skillOrder =>
     skillOrder.hash.split('-')
         .filter((_, i) => i > 0)
         .join('>');
