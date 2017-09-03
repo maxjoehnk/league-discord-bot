@@ -28,8 +28,20 @@ const start = async() => {
                         return await build.exec(config)(args, msg);
                 }
             }catch (err) {
-                msg.reply(err.message);
                 console.error(err);
+                return await msg.reply(err.message);
+            }
+        }
+        if (msg.content.startsWith('!lb')) {
+            const args = msg.content
+                .slice('!lb'.length)
+                .trim()
+                .split(/ +/g);
+            try {
+                return await build.exec(config)(args, msg);
+            }catch (err) {
+                console.error(err);
+                return await msg.reply(err.message);
             }
         }
     });
