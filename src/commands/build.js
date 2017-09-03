@@ -24,7 +24,7 @@ const buildMessage = (champion, stats) => {
     const role = championgg.getLabelForRole(stats.role);
     return new Discord.RichEmbed()
         .setTitle(champion.name)
-        .setDescription(role)
+        .setDescription(`Role: ${role} (${Math.round(stats.percentRolePlayed * 100)}%)`)
         .setThumbnail(champion.imageUrl)
         .addField(`Skill Order - Most Frequent (${highestCount.count} Games)`, formatSkillOrder(highestCount))
         .addField(`Skill Order - Highest Win % (${highestWinrate.count} Games)`, formatSkillOrder(highestWinrate));
