@@ -4,7 +4,7 @@ const { db } = require('../db');
 
 const exec = config => async(args, msg) => {
     const query = args.join(' ');
-    const champion = await riot.champions.find(db, config.keys.riot, query);
+    const champion = await riot.champions.find(db, config.keys.riot, query, config.search && config.search.threshold);
     const message = buildMessage(champion);
     msg.channel.send({ embed: message });
 };

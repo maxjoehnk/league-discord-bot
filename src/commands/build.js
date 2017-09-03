@@ -6,7 +6,7 @@ const exec = config => async(args, msg) => {
     const champion = await riot.champions.find(db, config.keys.riot, args[0]);
     let stats;
     if (args.length === 2) {
-        stats = await championgg.byRole(config.keys['champion.gg'], champion.id, args[1]);
+        stats = await championgg.byRole(config.keys['champion.gg'], champion.id, args[1], config.search && config.search.threshold);
     }else {
         stats = await championgg.mostPlayed(config.keys['champion.gg'], champion.id);
     }
