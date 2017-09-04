@@ -44,6 +44,18 @@ const start = async() => {
                 return await msg.reply(err.message);
             }
         }
+        if (msg.content.startsWith('!lc')) {
+            const args = msg.content
+                .slice('!lc'.length)
+                .trim()
+                .split(/ +/g);
+            try {
+                return await champion.exec(config)(args, msg);
+            }catch (err) {
+                console.error(err);
+                return await msg.reply(err.message);
+            }
+        }
     });
     await client.login(config.discord.token);
 };
