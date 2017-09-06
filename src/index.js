@@ -7,6 +7,30 @@ const build = require('./commands/build');
 const ability = require('./commands/ability');
 const d = require('debug')('league-discord:index');
 
+const parseMsg = prefix => msg => msg.content
+    .slice(prefix.length)
+    .trim()
+    .split(/ +/g);
+
+const captureHandler = async(msg, handler) => {
+    try {
+        await handler();
+    }catch (err) {
+        console.error(err);
+        await msg.reply(err.message);
+    }
+};
+
+const shortcut = (cmd, executor) => {
+    const parse = parseMsg(cmd);
+    return async msg => {
+        if (msg.content.startsWith(cmd)) {
+            const args = parse(msg);
+            await captureHandler(msg, () => executor(args, msg));
+        }
+    };
+};
+
 const start = async() => {
     await migrate(db);
     const config = await load(join(__dirname, '../config.yml'));
@@ -14,14 +38,15 @@ const start = async() => {
     client.on('ready', () => {
         d('Discord is ready');
     });
+    const championShortcut = shortcut('!lc', champion.exec(config));
+    const buildShortcut = shortcut('!lb', build.exec(config));
+    const abilityShortcut = shortcut('!la', ability.exec(config));
+    const parsePrimary = parseMsg(config.discord.prefix);
     client.on('message', async msg => {
         if (msg.content.startsWith(config.discord.prefix)) {
-            const args = msg.content
-                .slice(config.discord.prefix.length)
-                .trim()
-                .split(/ +/g);
+            const args = parsePrimary(msg);
             const cmd = args.shift();
-            try {
+            await captureHandler(msg, async() => {
                 switch (cmd) {
                     case champion.cmd:
                         return await champion.exec(config)(args, msg);
@@ -30,47 +55,11 @@ const start = async() => {
                     case ability.cmd:
                         return await ability.exec(config)(args, msg);
                 }
-            }catch (err) {
-                console.error(err);
-                return await msg.reply(err.message);
-            }
+            });
         }
-        if (msg.content.startsWith('!lb')) {
-            const args = msg.content
-                .slice('!lb'.length)
-                .trim()
-                .split(/ +/g);
-            try {
-                return await build.exec(config)(args, msg);
-            }catch (err) {
-                console.error(err);
-                return await msg.reply(err.message);
-            }
-        }
-        if (msg.content.startsWith('!lc')) {
-            const args = msg.content
-                .slice('!lc'.length)
-                .trim()
-                .split(/ +/g);
-            try {
-                return await champion.exec(config)(args, msg);
-            }catch (err) {
-                console.error(err);
-                return await msg.reply(err.message);
-            }
-        }
-        if (msg.content.startsWith('!la')) {
-            const args = msg.content
-                .slice('!la'.length)
-                .trim()
-                .split(/ +/g);
-            try {
-                return await ability.exec(config)(args, msg);
-            }catch (err) {
-                console.error(err);
-                return await msg.reply(err.message);
-            }
-        }
+        await championShortcut(msg);
+        await buildShortcut(msg);
+        await abilityShortcut(msg);
     });
     await client.login(config.discord.token);
 };
