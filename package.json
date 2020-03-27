@@ -24,7 +24,7 @@
   "homepage": "https://github.com/maxjoehnk/league-discord-bot#readme",
   "dependencies": {
     "debug": "^3.0.1",
-    "discord.js": "^11.1.0",
+    "discord.js": "^12.1.0",
     "js-yaml": "^3.9.1",
     "league-api": "github:maxjoehnk/league-api",
     "yargs": "^8.0.2"
